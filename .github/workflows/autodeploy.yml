@@ -20,10 +20,10 @@ jobs:
           fetch-depth: 0
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v1
         with:
           # 选择要使用的 node 版本
-          node-version: "16"
+          node-version: "14"
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
@@ -45,7 +45,7 @@ jobs:
 
       # 如果缓存没有命中，安装依赖
       - name: Install dependencies
-        run: pnpm i --frozen-lockfile
+        run: pnpm install --frozen-lockfile
 
       # 运行构建脚本
       - name: Build VuePress site
