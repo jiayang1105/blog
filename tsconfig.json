@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "outDir": "dist", // 指定输出目录
+    "target": "esnext", // 打包模块类型ESNext
+    "moduleResolution": "node", // 按照node模块来解析
+    "esModuleInterop": true, // 支持es6,commonjs模块
+    "resolveJsonModule": true, // 解析json模块
+    "allowJs": true, // 允许编译器编译 JS、JSX文件
+    "strict": true, // 开启所有严格的类型检查
+    "baseUrl": ".", // 解析非相对模块的基地址, 默认是当前目录
+    "paths": { // 路径映射, 相当于baseUrl
+      "/@theme/*": [
+        ".vuepress/theme/*"
+      ]
+    }
+  },
+  "include": [ // 指定被编译文件所在目录
+    "env.d.ts",
+    "src/**/*",
+    ".vuepress/**/*"
+  ]
+}
