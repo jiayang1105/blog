@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "vuepress dev",
-    "build": "vitepress build",
+    "build": "vuepress build",
     "preinstall": "npx only-allow pnpm"
   },
   "repository": {
