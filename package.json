@@ -18,5 +18,8 @@
   "bugs": {
     "url": "https://github.com/jiayang1105/blog/issues"
   },
-  "homepage": "https://github.com/jiayang1105/blog#readme"
+  "homepage": "https://github.com/jiayang1105/blog#readme",
+  "devDependencies": {
+    "vuepress": "^2.0.0-beta.39"
+  }
 }
