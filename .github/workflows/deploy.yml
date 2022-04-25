@@ -16,9 +16,9 @@ job:
         node-version: "14" # 选择要使用的 node 版本
     
     - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: latest
+      uses: pnpm/action-setup@v2
+      with:
+        version: latest
 
     # 缓存 node_modules
     - name: Cache ~/.pnpm-store
