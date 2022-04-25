@@ -1,51 +1,58 @@
-# name: Build and Deploy
-# on:
-#   push:
-#     branches:
-#       - master
-# jobs:
-#   build-and-deploy:
-#     runs-on: ubuntu-latest             # 运行所需要的虚拟机环境
-#     steps:                               # 任务运行的步骤
-#       - name: Checkout
-#         uses: actions/checkout@v3
+name: Deploy GitHub Pages
 
-#       - name: Setup Node.js  
-#         uses: actions/setup-node@v1
-#         with:
-#           node-version: "14" # 选择要使用的 node 版本
-      
-#       - name: Setup pnpm
-#         uses: pnpm/action-setup@v2
-#         with:
-#           version: latest
+# 触发条件：在 push 到 master 分支后
+on:
+  push:
+    branches:
+      - master
 
-#       # 缓存 node_modules
-#       - name: Cache ~/.pnpm-store
-#         uses: actions/cache@v3
-#         env:
-#           cache-name: cache-pnpm-store
-#         with:
-#           path: ~/.pnpm-store
-#           key: ${{ runner.os }}-preview-${{ env.cache-name }}-${{ hashFiles('**/pnpm-lock.yaml') }}
-#           restore-keys: |
-#             ${{ runner.os }}-preview-${{ env.cache-name }}-
-#             ${{ runner.os }}-preview-
-#             ${{ runner.os }}-
+# 任务
+jobs:
+  build-and-deploy:
+    # 服务器环境：最新版 Ubuntu
+    runs-on: ubuntu-latest
+    steps:
+      # 拉取代码
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0      # “最近更新时间” 等 git 日志相关信息，需要拉取全部提交记录
 
-#       # 如果缓存没有命中，安装依赖
-#       - name: Install dependencies
-#         run: pnpm install --frozen-lockfile
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: "14"  # 选择要使用的 node 版本
 
-#       # 运行构建脚本
-#       - name: Build VuePress site
-#         run: pnpm build
-#         env:
-#           DOC_ENV: preview  
-      
-#       - name: Deploy to GitHub Pages
-#         uses: JamesIves/github-pages-deploy-action@v4.3.0
-#         with:
-#           branch: gh-pages
-#           FOLDER: .vuepress/dist
-#           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: latest
+
+      # 缓存 node_modules
+      - name: Cache ~/.pnpm-store
+        uses: actions/cache@v3
+        env:
+          cache-name: cache-pnpm-store
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-preview-${{ env.cache-name }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-preview-${{ env.cache-name }}-
+            ${{ runner.os }}-preview-
+            ${{ runner.os }}-
+
+      # 如果缓存没有命中，安装依赖
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # 生成静态文件
+      - name: Build
+        run: pnpm build
+
+      # 部署到 GitHub Pages
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@releases/v3
+        with:
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}  # 读取 GitHub 仓库 secrets 的 ACCESS_TOKEN 变量
+          BRANCH: gh-pages                           # 部署分支 gh-pages
+          FOLDER: .vuepress/dist                     # 需要部署的文件在 .vuepress/dist 路径
