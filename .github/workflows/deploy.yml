@@ -48,6 +48,8 @@ jobs:
       # 生成静态文件
       - name: Build
         run: pnpm build
+        env:
+          DOC_ENV: preview
 
       # 部署到 GitHub Pages
       - name: Deploy
